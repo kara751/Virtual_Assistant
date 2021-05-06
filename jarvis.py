@@ -50,7 +50,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 #######################################################        ALL IMPORT ABOVE          ################################################################
 
 try:
-    client = wolframalpha.Client('G74W9A-AH9UUXPAH7')
+    client = wolframalpha.Client('######-##########')
 except Exception:
     print("Some features are not working")
 
