@@ -4,6 +4,7 @@ import shutil
 import time
 import wave
 from email.message import EmailMessage
+from tkinter import font
 import ec as ec
 import gmaps
 import pyaudio
@@ -29,31 +30,22 @@ import wmi
 import psutil
 import wolframalpha
 import subprocess
+from covid import Covid
+import speedtest
 from PyDictionary import PyDictionary
 import cv2
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from VideoCapture import Device
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
-from PyQt5.QtGui import QIcon, QPixmap
+from tkinter import *
 
-# app = QApplication(sys.argv)
-# win =QMainWindow()
-# win.setFixedSize(1000,700)
-# win.setWindowTitle("JARVIS")
-# lable =QLabel()
-# win.show()
-# sys.exit(app.exec_())
-
+global area
+root=Tk()
 #######################################################        ALL IMPORT ABOVE          ################################################################
 
 try:
     client = wolframalpha.Client('######-##########')
 except Exception:
     print("Some features are not working")
-
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
@@ -124,6 +116,7 @@ def takeCommand():
             print(f"{query}\n")
         except Exception as e:
             print("Speak it again plz...")
+            speak("Speak it again plz...")
             return "None"
         return query
 
@@ -194,7 +187,8 @@ def get_email_info():
 
 
 #######################################################        MAIN METHOD THAT FIRST RUN          ################################################################
-if __name__ == '__main__':
+def start():
+ if __name__ == '__main__':
     time.sleep(1)
     playsound('C:/Users/kbbha/Downloads/jarvis_introduction.mp3')
     wishMe()
@@ -203,12 +197,11 @@ if __name__ == '__main__':
     # speak("Hello , i am echo what can i do for you")
 
     #######################################################        SECOND MAIN METHOD          ################################################################
-
     if __name__ == '__main__':
         while True:
             query = takeCommand().lower()
 
-            #######################################################        WIKIPEDIA          ################################################################
+    #######################################################        WIKIPEDIA          ################################################################
 
             if "wikipedia" in query:
                 speak("Searching Wikipedia...")
@@ -248,7 +241,6 @@ if __name__ == '__main__':
             #######################################################        OPEN YOUR GOOGLE CLASSROOM         ################################################################
 
             elif 'google classroom' in query:
-
                 speak("Enter classroom user name")
                 user = input("enter classroom user name:-")
                 speak("enter classroom password")
@@ -298,7 +290,6 @@ if __name__ == '__main__':
             #######################################################       GMAIL LOGIN         ################################################################
 
             elif 'gmail login' in query:
-
                 speak("Enter user name")
                 user = input("enter user name:-")
                 speak("enter password")
@@ -333,7 +324,7 @@ if __name__ == '__main__':
 
                 speak("Enter user name")
                 user = input("enter user name:-")
-                speak("enter password")
+                speak("Enter password")
                 passw = input("enter password:-")
 
                 driver = webdriver.Chrome('C:\chromedriver.exe')
@@ -357,14 +348,12 @@ if __name__ == '__main__':
 
                 time.sleep(20)
 
-                meeting = driver.find_element_by_xpath(
-                    '//*[@id="yDmH0d"]/c-wiz/div/div[2]/div/div[1]/div[3]/div[1]/div[1]/div/button/div[2]')
+                meeting = driver.find_element_by_xpath('//*[@id="yDmH0d"]/c-wiz/div/div[2]/div/div[1]/div[3]/div/div[1]/div[1]/div/button/div[2]')
                 meeting.click()
 
                 time.sleep(5)
 
-                instantMeeting = driver.find_element_by_xpath(
-                    '//*[@id="yDmH0d"]/c-wiz/div/div[2]/div/div[1]/div[3]/div[1]/div[2]/div/ul/li[2]')
+                instantMeeting = driver.find_element_by_xpath('//*[@id="yDmH0d"]/c-wiz/div/div[2]/div/div[1]/div[3]/div/div[1]/div[2]/div/ul/li[2]/span[3]')
                 instantMeeting.click()
 
                 time.sleep(15)
@@ -379,12 +368,15 @@ if __name__ == '__main__':
                 dictionary = PyDictionary()
                 query = query.replace("what is the meaning of", '')
                 print("Meaning is ")
+                speak("Meaning is")
                 print(dictionary.meaning(query))
                 speak(dictionary.meaning(query))
                 print("Synonym is ")
+                speak("Synonym is")
                 print(dictionary.synonym(query))
                 speak(dictionary.synonym(query))
                 print("Antonym is ")
+                speak("Antonym is")
                 print(dictionary.antonym(query))
                 speak(dictionary.antonym(query))
 
@@ -401,7 +393,7 @@ if __name__ == '__main__':
 
             #######################################################        STACKOVERFLOW         ################################################################
 
-            elif 'open stackoverflow' in query:
+            elif 'open stackoverflow' in query or 'open stack overflow' in query:
                 print("Ok sir...")
                 speak("Ok sir...")
                 webbrowser.open('stackoverflow.com')
@@ -487,7 +479,20 @@ if __name__ == '__main__':
             elif 'the time' in query:
                 tday = datetime.datetime.today()
                 print(tday)
+                
+            elif 'precautions for covid-19' in query or 'precaution for covid 19' in query:
+                speak("Wear a mask")
+                speak("Clean your hands")
+                speak("Maintain safe distance")
+                speak("Get vaccinated")
 
+            elif 'covid' in query or 'Covid' in query:
+                covid = Covid(source="worldometers")
+                print(covid.get_data())
+                #speak(covid.get_data())
+                india_cases = covid.get_status_by_country_name("india")
+                print(india_cases)
+                speak(india_cases)
 
             #######################################################        WHEN WAS YOU CREATED           ################################################################
 
@@ -680,9 +685,9 @@ if __name__ == '__main__':
 
             elif 'hello world in java' in query:
 
-                print("class HelloWorld {")
-                print("public static void main(String[] args){")
-                print('System.out.println("Hello, World!"); }}')
+                print('''class HelloWorld {
+                public static void main(String[] args){
+                System.out.println("Hello, World!"); }}''')
 
                 speak("class HelloWorld {")
                 speak("public static void main(String[] args){")
@@ -751,10 +756,9 @@ if __name__ == '__main__':
                 translator = Translator()
                 result = translator.translate(query.replace('translate in french', ""), src='en', dest='fr')
                 print(result.text)
-
-
-
-
+            elif 'information about' in query:
+                query = query.replace('Information about',"")
+                pywhatkit.info(query,lines=4)
             #######################################################       TEMPERATURE IN CITYNAME         ################################################################
 
             elif 'temperature in' in query:
@@ -860,6 +864,9 @@ if __name__ == '__main__':
                 speak("Battery is at")
                 speak(battery.percent)
 
+
+
+
             #######################################################     |WHERE IS|USE FOR GOOGLE MAP LOCATION         ################################################################
 
             elif 'where is' in query:
@@ -872,7 +879,7 @@ if __name__ == '__main__':
             #######################################################       UNIQUE GOOGLE MAPS          ################################################################
 
             elif 'google maps' in query or 'google map' in query:
-
+             def mapss():
                 driver = webdriver.Chrome('C:\chromedriver.exe')
                 driver.get('https://www.google.com/maps/dir///@28.5214323,77.2265495,13z/data=!4m2!4m1!3e3')
                 time.sleep(10)
@@ -906,7 +913,7 @@ if __name__ == '__main__':
                 speak("would you like to open satellite mode")
 
                 query = takeCommand()
-                if 'yes' in query:
+                if 'yes' in query or 'han' in query or "bilkul" in query:
                     speak("ok sir")
                     menu = driver.find_element_by_xpath('//*[@id="omnibox-directions"]/div/div[1]/button')
                     menu.click()
@@ -922,8 +929,7 @@ if __name__ == '__main__':
                 else:
                     speak("OK sir")
 
-
-
+             
 
             #######################################################       WRITE A NOTE          ################################################################
 
@@ -993,7 +999,7 @@ if __name__ == '__main__':
 
             #######################################################        YOU SPEAK AND I TYPE ON ANYTHING THAT WILL OPEN LIKE NOTEPAD!         ################################################################
 
-            elif 'type' in query:
+            elif 'type' in query or 'write' in query or 'right' in query:
                 print("what you want to type")
                 speak("what you want to type")
                 query = takeCommand()
@@ -1155,3 +1161,106 @@ if __name__ == '__main__':
             else:
                 print("I dont have any data about")
                 speak("I dont have any data about")
+
+try:
+ root.geometry("700x550")
+ framecn=19
+ frames=[PhotoImage(file='abcd.gif',format = 'gif -index %i' %(i)) for i in range(framecn)]
+ def update(ind):
+    frame = frames[ind]
+    ind += 1
+    if ind == framecn:
+        ind = 0
+    label.configure(image=frame)
+    root.after(90, update, ind)
+ label = Label(root,bg="black")
+ label.place(x=30,y=50)
+ #label.pack()
+ root.after(0, update, 0)
+ l2=Label(text="A Virtual Assistant that we all need!",padx=7,fg="white",bg="black",font="Helvetica 15 bold")
+ l2.place(x=140,y=8)
+ #l2.pack()
+ def youtube():
+    speak("Ok sir...")
+    webbrowser.open('youtube.com')
+ def mapss():
+                driver = webdriver.Chrome('C:\chromedriver.exe')
+                driver.get('https://www.google.com/maps/dir///@28.5214323,77.2265495,13z/data=!4m2!4m1!3e3')
+                time.sleep(10)
+                print("starting point")
+                speak("starting point")
+                query = takeCommand()
+
+                time.sleep(5)
+
+                tx1 = driver.find_element_by_xpath('//*[@id="sb_ifc50"]/input')
+                tx1.click()
+                tx1.send_keys(query)
+
+                time.sleep(3)
+                print("destination point")
+                speak("destination point")
+                query = takeCommand()
+
+                tx2 = driver.find_element_by_xpath('//*[@id="sb_ifc51"]/input')
+                tx2.click()
+                tx2.send_keys(query)
+
+                time.sleep(5)
+
+                sear = driver.find_element_by_xpath('//*[@id="directions-searchbox-1"]/button[1]')
+                sear.click()
+
+                time.sleep(10)
+
+                print("would you like to open satellite mode")
+                speak("would you like to open satellite mode")
+
+                query = takeCommand()
+                if 'yes' in query or 'han' in query or "bilkul" in query:
+                    speak("ok sir")
+                    menu = driver.find_element_by_xpath('//*[@id="omnibox-directions"]/div/div[1]/button')
+                    menu.click()
+
+                    time.sleep(2)
+
+                    satellite = driver.find_element_by_xpath(
+                        '//*[@id="settings"]/div/div[2]/ul/jsl[2]/ul[1]/li[2]/div/button[1]/label')
+                    satellite.click()
+
+                    time.sleep(5)
+
+                else:
+                    speak("OK sir")
+
+ def google():
+     speak("Ok sir...")
+     webbrowser.open('google.com')
+ def gmail():
+     webbrowser.open_new_tab("gmail.com")
+     speak("Google Mail open now")
+ date = datetime.datetime.now()
+ format_date = f"{date:%a, %b %d %Y}"
+ l3 = Label(root, text=format_date,padx=4, fg="white", bg="green", font=("helvetica", 15,'bold'))
+ l3.place(x=40,y=70)
+ #l3.pack()
+ b1=Button(fg="white",bg="blue",text="Start",command=start,padx=7,font="Helvetica 15 bold")
+ b1.place(x=260,y=470)
+ b2=Button(fg="white",bg="red",text="Youtube",font="Helvetica 15 bold",command=youtube)
+ b2.place(x=520,y=70)
+ b3=Button(fg="white",bg="purple",text="Google",font="Helvetica 15 bold",command=google)
+ b3.place(x=70,y=160)
+ b4=Button(fg="white",bg="blue",text="Gmail",font="Helvetica 15 bold",command=gmail)
+ b4.place(x=535,y=160)
+ b5=Button(fg="white",bg="orange",text="Maps",font="Helvetica 15 bold",command=mapss)
+ b5.place(x=75,y=250)
+ b5 = Button(fg="white", bg="#ff0080", text="Instant\nMeeting", font="Helvetica 14 bold", command=mapss)
+ b5.place(x=545, y=250)
+ exit_button = Button(root,text="Exit",padx=7, command=root.destroy,fg="white",bg="orange",font="TimesNewRoman 15 bold")
+ exit_button.place(x=370,y=470)
+ #b1.pack()
+ root.title("JARVIS -A Personal Virtual Assistant")
+ root.resizable(0,0)
+ root.mainloop()
+except Exception as e:
+    print("Error!")
