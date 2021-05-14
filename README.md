@@ -1,7 +1,7 @@
 # Virtual Assistant using Python
 ## Introduction
 This is a simple virtual assistant that can do variety of task like
-Opening Google maps , telling weather and temperature inforamtion ,
+opening Google maps , telling weather and temperature information ,
 sending email, create an instant meeting and much more just using voice command!
 ***
 ## **Modules Used:**
