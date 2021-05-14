@@ -1244,8 +1244,18 @@ try:
      user = input("enter user name:-")
      speak("Enter password")
      passw = input("enter password:-")
+     opt = Options()
+     opt.add_argument("start-maximized")
+     opt.add_argument("--disable-extensions")
+     opt.add_experimental_option("prefs", { \
+         "profile.default_content_setting_values.media_stream_mic": 1,
+         "profile.default_content_setting_values.media_stream_camera": 1,
+         "profile.default_content_setting_values.geolocation": 1,
+         "profile.default_content_setting_values.notifications": 1
+     })
 
-     driver = webdriver.Chrome('C:\chromedriver.exe')
+     driver = webdriver.Chrome('C:\chromedriver.exe',options=opt)
+
      driver.get(
          'https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmeet.google.com%2Flanding&ec=GAlAmwM&flowName=GlifWebSignIn&flowEntry=AddSession')
      username = driver.find_element_by_xpath('//*[@id="identifierId"]')
