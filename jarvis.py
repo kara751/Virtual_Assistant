@@ -1239,6 +1239,44 @@ try:
  def gmail():
      webbrowser.open_new_tab("gmail.com")
      speak("Google Mail open now")
+ def meeting():
+     speak("Enter user name")
+     user = input("enter user name:-")
+     speak("Enter password")
+     passw = input("enter password:-")
+
+     driver = webdriver.Chrome('C:\chromedriver.exe')
+     driver.get(
+         'https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmeet.google.com%2Flanding&ec=GAlAmwM&flowName=GlifWebSignIn&flowEntry=AddSession')
+     username = driver.find_element_by_xpath('//*[@id="identifierId"]')
+     username.click()
+     username.send_keys(user)
+
+     next = driver.find_element_by_xpath('//*[@id="identifierNext"]/div/button/div[2]')
+     next.click()
+
+     time.sleep(3)
+
+     password = driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input')
+     password.click()
+     password.send_keys(passw)
+
+     x = driver.find_element_by_xpath('//*[@id="passwordNext"]/div/button/div[2]')
+     x.click()
+
+     time.sleep(20)
+
+     meeting = driver.find_element_by_xpath(
+         '//*[@id="yDmH0d"]/c-wiz/div/div[2]/div/div[1]/div[3]/div/div[1]/div[1]/div/button/div[2]')
+     meeting.click()
+
+     time.sleep(5)
+
+     instantMeeting = driver.find_element_by_xpath(
+         '//*[@id="yDmH0d"]/c-wiz/div/div[2]/div/div[1]/div[3]/div/div[1]/div[2]/div/ul/li[2]/span[3]')
+     instantMeeting.click()
+
+     time.sleep(15)   
  date = datetime.datetime.now()
  format_date = f"{date:%a, %b %d %Y}"
  l3 = Label(root, text=format_date,padx=4, fg="white", bg="green", font=("helvetica", 15,'bold'))
@@ -1254,7 +1292,7 @@ try:
  b4.place(x=535,y=160)
  b5=Button(fg="white",bg="orange",text="Maps",font="Helvetica 15 bold",command=mapss)
  b5.place(x=75,y=250)
- b5 = Button(fg="white", bg="#ff0080", text="Instant\nMeeting", font="Helvetica 14 bold", command=mapss)
+ b5 = Button(fg="white", bg="#ff0080", text="Instant\nMeeting", font="Helvetica 14 bold", command=meeting)
  b5.place(x=545, y=250)
  exit_button = Button(root,text="Exit",padx=7, command=root.destroy,fg="white",bg="orange",font="TimesNewRoman 15 bold")
  exit_button.place(x=370,y=470)
