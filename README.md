@@ -56,7 +56,7 @@ root.geometry("700x550")<br />
 root.resizable(0,0)<br />
 root.mainloop()
 
-![GUI TKINTER](jarvis.png)
+![GUI TKINTER](jarvis.PNG)
   
 
 
